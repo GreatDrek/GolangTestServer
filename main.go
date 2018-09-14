@@ -5,6 +5,10 @@ import (
 	"math/rand"
 )
 
+func init() {
+	fmt.Println("test init")
+}
+
 func main() {
 	s0 := make([]int32, 0, 10)
 
