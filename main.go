@@ -15,4 +15,9 @@ func main() {
 	for _, val := range s0 {
 		fmt.Println(val)
 	}
+
+	i := 5
+	b := &i
+	*b = 6
+	fmt.Println(i)
 }
