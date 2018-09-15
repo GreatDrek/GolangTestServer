@@ -26,4 +26,34 @@ func main() {
 
 	allP.print()
 
+	// foo это наше замыкание
+	foo := outer()
+
+	// вызов замыкания
+	for i := 0; i < 5; i++ {
+		fmt.Println(foo(4))
+	}
+
+	var x oru = 45
+	x.print()
+	x.polovina()
+
+}
+
+func outer() func(int) int {
+	a := 0
+	return func(x int) int {
+		a += x
+		return a
+	}
+}
+
+type oru int
+
+func (or oru) print() {
+	fmt.Println(or)
+}
+
+func (or oru) polovina() {
+	fmt.Println(float64(or) / float64(2))
 }
