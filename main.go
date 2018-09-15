@@ -20,8 +20,12 @@ func main() {
 		fmt.Println(val)
 	}
 
-	i := 5
-	b := &i
-	*b = 6
-	fmt.Println(i)
+	p := new(int)
+
+	fmt.Println(p)
+
+	*p = 6
+	// p = 6 // Ошибка, так как p имеет тип *int а не int
+
+	fmt.Println(p, *p)
 }
