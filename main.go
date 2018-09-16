@@ -42,6 +42,7 @@ func main() {
 
 func outer() func(int) int {
 	a := 0
+
 	return func(x int) int {
 		a += x
 		return a
