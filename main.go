@@ -4,57 +4,30 @@ import (
 	"fmt"
 )
 
-type allPerson struct {
-	index int
-	person
+type myInt int
+
+type myStruct struct {
+	newInt myInt
 }
 
-type person struct {
-	name     string
-	age      byte
-	nickname string
-	key      int
+func (i *myInt) printInt() {
+	fmt.Println(*i)
 }
 
-func (ap allPerson) print() {
-	fmt.Println(ap.name)
+func (i *myStruct) printInt() {
+	i.newInt = 8
+	fmt.Println(*i)
 }
 
 func main() {
+	m := myStruct{5}
+	fmt.Println(m)
 
-	allP := allPerson{1, person{"Drek", 24, "GreatDrek", 2410}}
+	fmt.Println(m.newInt)
 
-	allP.print()
+	m.newInt.printInt()
 
-	// foo это наше замыкание
-	foo := outer()
+	m.printInt()
 
-	// вызов замыкания
-	for i := 0; i < 5; i++ {
-		fmt.Println(foo(4))
-	}
-
-	var x oru = 45
-	x.print()
-	x.polovina()
-
-}
-
-func outer() func(int) int {
-	a := 0
-
-	return func(x int) int {
-		a += x
-		return a
-	}
-}
-
-type oru int
-
-func (or oru) print() {
-	fmt.Println(or)
-}
-
-func (or oru) polovina() {
-	fmt.Println(float64(or) / float64(2))
+	m.newInt.printInt()
 }
