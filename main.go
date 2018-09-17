@@ -4,30 +4,43 @@ import (
 	"fmt"
 )
 
-type myInt int
-
-type myStruct struct {
-	newInt myInt
+type myInterface interface {
+	move(int)
+	myPrint()
 }
 
-func (i *myInt) printInt() {
-	fmt.Println(*i)
+type myType struct {
+	Number int
 }
 
-func (i *myStruct) printInt() {
-	i.newInt = 8
-	fmt.Println(*i)
+type myType2 struct {
+	Number int
+}
+
+func (m *myType) move(x int) {
+	m.Number += x
+}
+
+func (m *myType2) move(x int) {
+	m.Number -= x
+}
+
+func (m *myType) myPrint() {
+	fmt.Println(m.Number)
+}
+
+func (m *myType2) myPrint() {
+	fmt.Println(m.Number)
 }
 
 func main() {
-	m := myStruct{5}
-	fmt.Println(m)
+	fmt.Println("Interface")
 
-	fmt.Println(m.newInt)
-
-	m.newInt.printInt()
-
-	m.printInt()
-
-	m.newInt.printInt()
+	var slice []myInterface = []myInterface{&myType{Number: 4}, &myType2{Number: 4}}
+	x := 19
+	for _, sl := range slice {
+		sl.move(x)
+		sl.myPrint()
+		x++
+	}
 }
