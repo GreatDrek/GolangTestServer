@@ -43,4 +43,28 @@ func main() {
 		sl.myPrint()
 		x++
 	}
+
+	var i I
+
+	i = "d"
+
+	fmt.Println(i)
+	_, ok := i.(string)
+	fmt.Println(ok)
+
+	infoType(i)
+}
+
+type I interface{}
+
+func infoType(i I) {
+	_, s := i.(string)
+	_, in := i.(int)
+
+	if s {
+		fmt.Println("string")
+	}
+	if in {
+		fmt.Println("int")
+	}
 }
