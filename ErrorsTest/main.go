@@ -2,27 +2,30 @@ package main
 
 import (
 	"fmt"
+	//"time"
 )
 
-type MyError struct {
-	What string
+type myInterface interface {
+	MyPrint()
 }
 
-// Test
-func (e *MyError) Error() string {
-	return fmt.Sprintf("%s", e.What)
+type myInt int
+
+func (mp myInt) MyPrint() {
+	fmt.Println(mp)
 }
 
-func run() error {
-	return &MyError{
-		"nil",
-	}
+func (mp *myInt) Reload() {
+	*mp = myInt(0)
 }
 
 func main() {
-	if err := run(); err != nil {
-		fmt.Println(err)
-	} else {
-		fmt.Println("Normal")
-	}
+	var x myInt = myInt(5)
+	go x.Reload()
+	//time.Sleep(100 * time.Millisecond)
+	test(x)
+}
+
+func test(mI myInterface) {
+	mI.MyPrint()
 }
