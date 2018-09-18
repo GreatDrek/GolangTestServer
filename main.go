@@ -46,25 +46,25 @@ func main() {
 
 	var i I
 
-	i = "d"
+	i = 46
 
 	fmt.Println(i)
 	_, ok := i.(string)
 	fmt.Println(ok)
 
-	infoType(i)
+	InfoType(i)
 }
 
 type I interface{}
 
-func infoType(i I) {
-	_, s := i.(string)
-	_, in := i.(int)
-
-	if s {
+// InfoType
+func InfoType(i I) {
+	switch i.(type) {
+	case string:
 		fmt.Println("string")
-	}
-	if in {
+	case int:
 		fmt.Println("int")
+	default:
+		fmt.Println("other type")
 	}
 }
