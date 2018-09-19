@@ -2,69 +2,56 @@ package main
 
 import (
 	"fmt"
+	//"time"
 )
 
-type myInterface interface {
-	move(int)
-	myPrint()
-}
-
-type myType struct {
-	Number int
-}
-
-type myType2 struct {
-	Number int
-}
-
-func (m *myType) move(x int) {
-	m.Number += x
-}
-
-func (m *myType2) move(x int) {
-	m.Number -= x
-}
-
-func (m *myType) myPrint() {
-	fmt.Println(m.Number)
-}
-
-func (m *myType2) myPrint() {
-	fmt.Println(m.Number)
-}
+var b bool = false
 
 func main() {
-	fmt.Println("Interface")
+	fmt.Println("Start programm")
+	myChan := make(chan string, 3)
+	myInputChan := make(chan string)
+	go inputConsole(myInputChan)
+	go input(myChan, myInputChan)
+	go output(myChan)
 
-	var slice []myInterface = []myInterface{&myType{Number: 4}, &myType2{Number: 4}}
-	x := 19
-	for _, sl := range slice {
-		sl.move(x)
-		sl.myPrint()
-		x++
+	for {
+		if b == true {
+			break
+		}
+		//fmt.Println(time.Second)
+		//time.Sleep(time.Second * 5)
 	}
 
-	var i I
-
-	i = 46
-
-	fmt.Println(i)
-	_, ok := i.(string)
-	fmt.Println(ok)
-
-	InfoType(i)
+	fmt.Println("End programm")
 }
 
-type I interface{}
+func inputConsole(c chan string) {
+	var inStr string
+	for {
+		fmt.Scanln(&inStr)
+		if inStr == "exit" {
+			b = true
+			break
+		}
+		c <- inStr
+	}
+}
 
-// InfoType
-func InfoType(i I) {
-	switch i.(type) {
-	case string:
-		fmt.Println("string")
-	case int:
-		fmt.Println("int")
-	default:
-		fmt.Println("other type")
+func input(c chan string, c1 chan string) {
+	for {
+		s := <-c1
+		c <- s
+	}
+}
+
+func output(c chan string) {
+	for {
+		if len(c) == cap(c) {
+			for i := 0; i < cap(c); i++ {
+				fmt.Println("Chanel:", <-c)
+			}
+			//fmt.Println(len(c), cap(c))
+		}
 	}
 }
