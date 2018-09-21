@@ -2,35 +2,48 @@ package main
 
 import (
 	"fmt"
-	//"time"
+	"time"
 )
 
-type myInterface interface {
-	TestFunc()
-}
-
-type myStruct struct {
-	name string
-}
-
-func (mS myStruct) TestFunc() {
-	fmt.Println(mS.name)
-}
-
 func main() {
-	c := make(chan myInterface)
+	fmt.Println("Start programm")
+
+	c0 := make(chan byte)
+	c1 := make(chan string)
 
 	go func() {
-		mI := myInterface(myStruct{name: "Drek"})
-		c <- mI
+		defer close(c0)
+		for {
+			c0 <- 66
+			time.Sleep(time.Millisecond * 500)
+			break
+		}
 	}()
 
 	go func() {
-		mI1 := <-c
-		mI1.TestFunc()
+		for {
+			c1 <- "drek"
+			time.Sleep(time.Millisecond * 1250)
+			//close(c1)
+		}
+	}()
+
+	go func() {
+		for {
+			select {
+			case c, open := <-c0:
+				if open {
+					fmt.Println(c, open)
+				}
+			case c := <-c1:
+				fmt.Println(c)
+			default:
+				fmt.Println("data")
+				time.Sleep(time.Millisecond * 800)
+			}
+		}
 	}()
 
 	fmt.Scanln()
-
 	fmt.Println("End programm")
 }
