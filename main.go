@@ -2,48 +2,51 @@ package main
 
 import (
 	"fmt"
-	"time"
+	//"io"
+	"bufio"
+	"net"
 )
 
 func main() {
-	fmt.Println("Start programm")
+	listener, _ := net.Listen("tcp", ":5000")
+	//allConn := make([]net.Conn, 0, 5)
 
-	c0 := make(chan byte)
-	c1 := make(chan string)
+	for {
+		conn, err := listener.Accept()
 
-	go func() {
-		defer close(c0)
-		for {
-			c0 <- 66
-			time.Sleep(time.Millisecond * 500)
-			break
+		if err != nil {
+			fmt.Println("Dont connect:", err)
+			conn.Close()
+			continue
 		}
-	}()
 
-	go func() {
-		for {
-			c1 <- "drek"
-			time.Sleep(time.Millisecond * 1250)
-			//close(c1)
-		}
-	}()
+		//allConn = append(allConn, conn)
 
-	go func() {
-		for {
-			select {
-			case c, open := <-c0:
-				if open {
-					fmt.Println(c, open)
+		fmt.Println("Connect")
+
+		bufReader := bufio.NewReader(conn)
+		fmt.Println("Start reading")
+
+		go func(conn net.Conn) {
+			defer conn.Close()
+			for {
+				rbyte, _, err := bufReader.ReadLine()
+
+				if err != nil {
+					fmt.Println("Buf error:", err)
+					break
 				}
-			case c := <-c1:
-				fmt.Println(c)
-			default:
-				fmt.Println("data")
-				time.Sleep(time.Millisecond * 800)
-			}
-		}
-	}()
 
-	fmt.Scanln()
-	fmt.Println("End programm")
+				s := string(rbyte)
+
+				fmt.Println(s)
+
+				//for _, val := range allConn {
+				//	val.Write([]byte(s))
+				//}
+			}
+		}(conn)
+	}
+	//listener.Close()
+	//fmt.Println("Stop server")
 }
