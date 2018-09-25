@@ -1,31 +1,51 @@
 package main
 
 import (
+	"encoding/hex"
 	"fmt"
-	//"time"
+	"net"
 )
 
-type myInterface interface {
-	MyPrint()
-}
-
-type myInt int
-
-func (mp myInt) MyPrint() {
-	fmt.Println(mp)
-}
-
-func (mp *myInt) Reload() {
-	*mp = myInt(0)
-}
-
 func main() {
-	var x myInt = myInt(5)
-	go x.Reload()
-	//time.Sleep(100 * time.Millisecond)
-	test(x)
+	fmt.Println("Hello World!")
+
+	//Basic variables
+	port := ":8080"
+	protocol := "udp"
+
+	//Build the address
+	udpAddr, err := net.ResolveUDPAddr(protocol, port)
+	if err != nil {
+		fmt.Println("Wrong Address")
+		return
+	}
+
+	//Output
+	fmt.Println("Coded by Roberto E. Zubieta\nReading " + protocol + " from " + udpAddr.String())
+
+	//Create the connection
+	udpConn, err := net.ListenUDP(protocol, udpAddr)
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	//Keep calling this function
+	for {
+		display(udpConn)
+	}
+
 }
 
-func test(mI myInterface) {
-	mI.MyPrint()
+func display(conn *net.UDPConn) {
+
+	var buf [2048]byte
+	n, err := conn.Read(buf[0:])
+	if err != nil {
+		fmt.Println("Error Reading")
+		return
+	} else {
+		fmt.Println(hex.EncodeToString(buf[0:n]))
+		fmt.Println("Package Done")
+	}
+
 }
