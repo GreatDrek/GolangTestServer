@@ -2,51 +2,65 @@ package main
 
 import (
 	"fmt"
-	//"io"
-	"bufio"
 	"net"
 )
 
+type Client struct {
+	index    byte
+	addr     *net.UDPAddr
+	nickName string
+}
+
 func main() {
-	listener, _ := net.Listen("tcp", ":5000")
-	//allConn := make([]net.Conn, 0, 5)
+	ServerConn, _ := net.ListenUDP("udp", &net.UDPAddr{IP: []byte{0, 0, 0, 0}, Port: 10001, Zone: ""})
+	defer ServerConn.Close()
+	buf := make([]byte, 1024)
+
+	allClient := make(map[byte]Client)
 
 	for {
-		conn, err := listener.Accept()
+		n, addr, err := ServerConn.ReadFromUDP(buf)
 
 		if err != nil {
-			fmt.Println("Dont connect:", err)
-			conn.Close()
-			continue
+			fmt.Println("Error 0:", err)
 		}
 
-		//allConn = append(allConn, conn)
+		allClient[buf[0]] = Client{index: buf[0], addr: addr, nickName: string(buf[1:n])}
 
-		fmt.Println("Connect")
-
-		bufReader := bufio.NewReader(conn)
-		fmt.Println("Start reading")
-
-		go func(conn net.Conn) {
-			defer conn.Close()
-			for {
-				rbyte, _, err := bufReader.ReadLine()
-
-				if err != nil {
-					fmt.Println("Buf error:", err)
-					break
-				}
-
-				s := string(rbyte)
-
-				fmt.Println(s)
-
-				//for _, val := range allConn {
-				//	val.Write([]byte(s))
-				//}
-			}
-		}(conn)
+		//s := string(buf[1:n])
 	}
-	//listener.Close()
-	//fmt.Println("Stop server")
+
+	//	allAddr := make([]*net.UDPAddr, 0, 10)
+	//	for {
+	//		n, addr, _ := ServerConn.ReadFromUDP(buf)
+
+	//		if len(allAddr) == 0 {
+	//			allAddr = append(allAddr, addr)
+	//		} else {
+	//			for idx, val0 := range allAddr {
+	//				if idx == len(allAddr)-1 {
+	//					if val0.Port != addr.Port {
+	//						allAddr = append(allAddr, addr)
+	//					} else {
+	//						break
+	//					}
+	//				} else {
+	//					if val0.Port == addr.Port {
+	//						break
+	//					}
+	//				}
+	//			}
+	//		}
+
+	//		for _, val := range allAddr {
+	//			//if val, ok := allAddr[key]; ok{
+	//			//fmt.Println(val)
+	//			ServerConn.WriteToUDP([]byte(string(buf[0:n])), val)
+	//			//}
+	//			//ServerConn.WriteToUDP([]byte("TEST"), val)
+	//			fmt.Println(allAddr)
+	//		}
+	//		fmt.Println("Received ", string(buf[0:n]), " from ", addr)
+	//		fmt.Println(len(allAddr))
+	//}
 }
