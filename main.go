@@ -36,7 +36,11 @@ func Connect() {
 
 		if n >= 7 {
 			if string(buf[0:3]) == "fH8" {
-				fmt.Println(addr, string(buf[0:n]))
+				if string(buf[0:4]) == "0000" {
+					fmt.Println(addr, string(buf[0:n]))
+				} else {
+					fmt.Println(addr, string(buf[0:n]))
+				}
 			}
 		}
 	}
