@@ -21,6 +21,6 @@ func main() {
 		if input == "close" {
 			break
 		}
-		Conn.Write([]byte(input))
+		Conn.Write([]byte("fH8" + input))
 	}
 }
