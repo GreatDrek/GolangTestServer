@@ -1,65 +1,48 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
-	"net"
-	//"time"
+	"net/http"
 )
 
-var s string
+var port string = ":8181"
 
 func main() {
-	listener, err := net.Listen("tcp", ":4545")
 
+	http.HandleFunc("/", mainPage)
+	http.HandleFunc("/users", users)
+
+	fmt.Println("Start server")
+
+	err := http.ListenAndServe(port, nil)
 	if err != nil {
-		fmt.Println(err)
-		return
+		fmt.Println("Error:", err)
 	}
-	defer listener.Close()
-	fmt.Println("Server is listening...")
-	for {
-		conn, err := listener.Accept()
-		if err != nil {
-			fmt.Println(err)
-			conn.Close()
-			continue
-		}
-		go handleConnection(conn) // запускаем горутину для обработки запроса
-	}
+
+	fmt.Println("End")
 }
 
-// обработка подключения
-func handleConnection(conn net.Conn) {
-	defer conn.Close()
-	//	go func() {
-	//		for {
-	//			_, err := conn.Write([]byte(s))
-	//			if err != nil {
-	//				fmt.Println("Close connect")
-	//				break
-	//			}
-	//			//conn.Write([]byte(s))
-	//			time.Sleep(time.Second * 10)
-	//			fmt.Println(conn)
-	//		}
-	//	}()
-	for {
-		// считываем полученные в запросе данные
-		input := make([]byte, (1024 * 4))
-		n, err := conn.Read(input)
-		if n == 0 || err != nil {
-			fmt.Println("Read error:", err)
-			break
-		}
-		source := string(input[0:n])
+type User struct {
+	FirstName string `json:"first_name"`
+	LastName  string `json:"last_name"`
+}
 
-		s = source
+func mainPage(w http.ResponseWriter, r *http.Request) {
+	//user := User{FirstName: "Vasia", LastName: "Drek"}
+	//js, err := json.Marshal(user)
+	//if err != nil {
+	//	fmt.Println("Error:", err)
+	//}
+	w.Write([]byte(r.URL.Path))
+	//fmt.Println(r.URL.Path)
+}
 
-		// выводим на консоль сервера диагностическую информацию
-		fmt.Println(source)
-		// отправляем данные клиенту
-		//conn.Write([]byte(s))
+func users(w http.ResponseWriter, r *http.Request) {
+	userSlice := []User{User{"One", "Two"}, User{"Three", "Four"}}
+	js, err := json.Marshal(userSlice)
+	if err != nil {
+		fmt.Println("Error:", err)
 	}
-
-	fmt.Println("Exit")
+	w.Write(js)
 }
