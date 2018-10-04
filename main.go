@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"net"
-	"time"
+	//"time"
 )
 
 var s string
@@ -31,18 +31,18 @@ func main() {
 // обработка подключения
 func handleConnection(conn net.Conn) {
 	defer conn.Close()
-	go func() {
-		for {
-			_, err := conn.Write([]byte(s))
-			if err != nil {
-				fmt.Println("Close connect")
-				break
-			}
-			//conn.Write([]byte(s))
-			time.Sleep(time.Millisecond * 500)
-			fmt.Println(conn)
-		}
-	}()
+	//	go func() {
+	//		for {
+	//			_, err := conn.Write([]byte(s))
+	//			if err != nil {
+	//				fmt.Println("Close connect")
+	//				break
+	//			}
+	//			//conn.Write([]byte(s))
+	//			time.Sleep(time.Second * 10)
+	//			fmt.Println(conn)
+	//		}
+	//	}()
 	for {
 		// считываем полученные в запросе данные
 		input := make([]byte, (1024 * 4))
