@@ -2,25 +2,34 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
+	"log"
 	"net/http"
+	"os"
 )
 
-var port string = ":8181"
+//var port string = ":8181"
 
 func main() {
 
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		log.Fatal("$PORT must be set")
+	}
+
+	go httpServer(port)
+}
+
+func httpServer(port string) {
 	http.HandleFunc("/", mainPage)
 	http.HandleFunc("/users", users)
 
-	fmt.Println("Start server")
+	log.Fatal("Start server")
 
-	err := http.ListenAndServe(port, nil)
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Fatal("Error:", err)
 	}
-
-	fmt.Println("End")
 }
 
 type User struct {
@@ -42,7 +51,7 @@ func users(w http.ResponseWriter, r *http.Request) {
 	userSlice := []User{User{"One", "Two"}, User{"Three", "Four"}}
 	js, err := json.Marshal(userSlice)
 	if err != nil {
-		fmt.Println("Error:", err)
+		log.Fatal("Error:", err)
 	}
 	w.Write(js)
 }
