@@ -1,30 +1,34 @@
 package main
 
 import (
-	"encoding/json"
+	//"myLib"
+	"connect"
 	"log"
-	"net/http"
-	"os"
-)
 
-//var port string = ":8181"
+	//"github.com/gorilla/websocket"
+
+	//"time"
+
+	"fmt"
+	"net/http"
+)
 
 func main() {
 
-	port := os.Getenv("PORT")
+	fmt.Println("Start server")
 
-	if port == "" {
-		log.Fatal("$PORT must be set")
-	}
+	port := "5000"
 
 	go httpServer(port)
+
+	fmt.Scanln()
 }
 
 func httpServer(port string) {
 	http.HandleFunc("/", mainPage)
-	http.HandleFunc("/users", users)
+	http.HandleFunc("/status", statusServer)
 
-	log.Fatal("Start server")
+	http.HandleFunc("/test", test)
 
 	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
@@ -32,26 +36,41 @@ func httpServer(port string) {
 	}
 }
 
-type User struct {
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"`
-}
-
 func mainPage(w http.ResponseWriter, r *http.Request) {
-	//user := User{FirstName: "Vasia", LastName: "Drek"}
-	//js, err := json.Marshal(user)
-	//if err != nil {
-	//	fmt.Println("Error:", err)
-	//}
-	w.Write([]byte(r.URL.Path))
-	//fmt.Println(r.URL.Path)
+	if r.URL.Path == "/" {
+		w.Write([]byte("error"))
+	} else {
+		if r.URL.Path != "/favicon.ico" {
+			b := []byte(r.URL.Path)
+			connect.AddUser(string(b[1:]))
+			w.Write(b[1:])
+		}
+	}
 }
 
-func users(w http.ResponseWriter, r *http.Request) {
-	userSlice := []User{User{"One", "Two"}, User{"Three", "Four"}}
-	js, err := json.Marshal(userSlice)
-	if err != nil {
-		log.Fatal("Error:", err)
+func statusServer(w http.ResponseWriter, r *http.Request) {
+	s := ""
+	for key, value := range connect.ReturnAllConnect() {
+		s += key + ": " + value + "\n"
 	}
-	w.Write(js)
+	w.Write([]byte(s))
+}
+
+func test(w http.ResponseWriter, r *http.Request) {
+	resp, err := http.Get("http://127.0.0.1:5000/status")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	defer resp.Body.Close()
+	for true {
+		bs := make([]byte, 1014)
+		n, err := resp.Body.Read(bs)
+
+		fmt.Println(string(bs[:n]))
+
+		if n == 0 || err != nil {
+			break
+		}
+	}
 }

@@ -1,0 +1,13 @@
+{
+	"comment": "",
+	"ignore": "test",
+	"package": [
+		{
+			"checksumSHA1": "VpUXhksaY432Oy2JWpp2TkxwcaQ=",
+			"path": "github.com/gorilla/websocket",
+			"revision": "a51a35ae3232254685f26a0b6d995ca0e81e2248",
+			"revisionTime": "2018-10-06T15:35:33Z"
+		}
+	],
+	"rootPath": "GolangTestServer"
+}
