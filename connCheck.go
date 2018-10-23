@@ -341,6 +341,8 @@ func (c *Client) logickLoggin(datMessage *dataMesage) error {
 				break
 			}
 
+			log.Println(infoUser)
+
 			if infoUser.Email == "" {
 				retunrError = errors.New("nil email content")
 				break

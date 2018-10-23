@@ -5,6 +5,7 @@ import (
 
 	"database/sql"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
@@ -24,9 +25,9 @@ func checkUser(logData logginDataClient) (*bdInfo, error) {
 	var err error
 	var infoClient *bdInfo
 
-	connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
-	//db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	db, err = sql.Open("postgres", connStr)
+	//connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
+	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	//db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		//log.Fatalf("Error opening database: %q", err)
 		return nil, err
@@ -58,9 +59,9 @@ func checkUser(logData logginDataClient) (*bdInfo, error) {
 
 func addUser(infoClient *bdInfo) error {
 	var err error
-	connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
-	//db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	db, err = sql.Open("postgres", connStr)
+	//connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
+	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	//db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		return err
 	}
@@ -79,9 +80,9 @@ func addUser(infoClient *bdInfo) error {
 
 func updateUser(infoClient *bdInfo) error {
 	var err error
-	connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
-	//db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	db, err = sql.Open("postgres", connStr)
+	//connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
+	db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	//db, err = sql.Open("postgres", connStr)
 	if err != nil {
 		return err
 	}
@@ -105,9 +106,9 @@ func updateUser(infoClient *bdInfo) error {
 }
 
 func creatDB() {
-	connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
-	//db, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	db, err := sql.Open("postgres", connStr)
+	//connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	//db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		return
 	}
