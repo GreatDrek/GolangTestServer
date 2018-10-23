@@ -2,6 +2,7 @@ package main
 
 import (
 	//"crypto/sha256"
+	"net/http"
 
 	"database/sql"
 	"log"
@@ -116,5 +117,36 @@ func creatDB() {
 
 	if _, err := db.Exec("CREATE TABLE IF NOT EXISTS idusers (id text, email text, key bytea, salt bytea)"); err != nil {
 		return
+	}
+}
+
+
+func infomydb(w http.ResponseWriter, r *http.Request) {
+	
+	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
+	if err != nil {
+		log.Println(err)
+	}
+	defer db.Close()
+	
+	rows, err := db.Query("SELECT * FROM idusers")
+	if err != nil {
+		w.Write([]byte("Error reading idusers"))
+		log.Println(err)
+	}
+
+	defer rows.Close()
+	for rows.Next() {
+		//var tick time.Time
+		var id string
+		var email string
+		var key []byte
+		var salt []byte
+		
+		if err := rows.Scan(&id, &email, &key, &salt); err != nil {
+			w.Write([]byte("Error scanning ticks"))
+			log.Println(err)
+		}
+		w.Write([]byte(email + "   " + string(key) + "   " + string(salt) + "\n"))
 	}
 }

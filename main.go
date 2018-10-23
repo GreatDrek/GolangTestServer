@@ -35,6 +35,7 @@ func main() {
 	http.HandleFunc("/bd", func(w http.ResponseWriter, r *http.Request) {
 		creatDB()
 	})
+	http.HandleFunc("/infodb", infomydb)
 	//
 
 	http.HandleFunc("/wss", func(w http.ResponseWriter, r *http.Request) {
