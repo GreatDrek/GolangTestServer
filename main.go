@@ -1,76 +1,64 @@
 package main
 
 import (
-	//"myLib"
-	"connect"
+	"flag"
 	"log"
-
-	//"github.com/gorilla/websocket"
-
-	//"time"
-
-	"fmt"
 	"net/http"
+	"os"
+)
+
+var (
+	addr *string
 )
 
 func main() {
 
-	fmt.Println("Start server")
+	log.Println("Start server")
 
-	port := "5000"
+	port := os.Getenv("PORT")
 
-	go httpServer(port)
+	if port == "" {
+		//log.Fatal("$PORT must be set")
+		port = "5000"
+	}
 
-	fmt.Scanln()
-}
+	addr = flag.String("addr", ":"+port, "http service address")
 
-func httpServer(port string) {
-	http.HandleFunc("/", mainPage)
-	http.HandleFunc("/status", statusServer)
+	flag.Parse()
 
-	http.HandleFunc("/test", test)
+	hub := newHub()
 
-	err := http.ListenAndServe(":"+port, nil)
+	go hub.run()
+
+	//
+	http.HandleFunc("/", serveHome)
+	http.HandleFunc("/bd", func(w http.ResponseWriter, r *http.Request) {
+		creatDB()
+	})
+	//
+
+	http.HandleFunc("/wss", func(w http.ResponseWriter, r *http.Request) {
+		serveWs(hub, w, r)
+	})
+
+	err := http.ListenAndServe(*addr, nil)
 	if err != nil {
-		log.Fatal("Error:", err)
+		log.Fatal("ListenAndServe: ", err)
 	}
 }
 
-func mainPage(w http.ResponseWriter, r *http.Request) {
-	if r.URL.Path == "/" {
-		w.Write([]byte("error"))
-	} else {
-		if r.URL.Path != "/favicon.ico" {
-			b := []byte(r.URL.Path)
-			connect.AddUser(string(b[1:]))
-			w.Write(b[1:])
-		}
-	}
-}
-
-func statusServer(w http.ResponseWriter, r *http.Request) {
-	s := ""
-	for key, value := range connect.ReturnAllConnect() {
-		s += key + ": " + value + "\n"
-	}
-	w.Write([]byte(s))
-}
-
-func test(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get("http://127.0.0.1:5000/status")
-	if err != nil {
-		fmt.Println(err)
+func serveHome(w http.ResponseWriter, r *http.Request) {
+	log.Println(r.URL)
+	if r.URL.Path != "/" {
+		http.Error(w, "Not found", http.StatusNotFound)
 		return
 	}
-	defer resp.Body.Close()
-	for true {
-		bs := make([]byte, 1014)
-		n, err := resp.Body.Read(bs)
-
-		fmt.Println(string(bs[:n]))
-
-		if n == 0 || err != nil {
-			break
-		}
+	if r.Method != "GET" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
 	}
+	http.ServeFile(w, r, "home.html")
 }
+
+//connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
+//db, err := sql.Open("postgres", connStr)
