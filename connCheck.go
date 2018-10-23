@@ -476,7 +476,7 @@ func getUserInfo(code string) ([]byte, error) {
 	googleOauthConfig = &oauth2.Config{
 		RedirectURL:  "http://localhost:5000/dummy/oauth2callback",
 		ClientID:     "93334427286-9kkusop9sjl32iml5qasuc58dhht25q7.apps.googleusercontent.com", //os.Getenv("GOOGLE_CLIENT_ID"),
-		ClientSecret: "tH98sCntGUMNNncd9fKPuDO1",                                                //os.Getenv("GOOGLE_CLIENT_SECRET"),
+		ClientSecret: "UdoSX27W3kMgERgTY9lqH6Qv",                                                //os.Getenv("GOOGLE_CLIENT_SECRET"),
 		Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email"},
 		Endpoint:     google.Endpoint,
 	}
