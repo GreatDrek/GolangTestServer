@@ -37,7 +37,6 @@ const (
 
 var (
 	newline           = []byte{'\n'}
-	space             = []byte{' '}
 	googleOauthConfig *oauth2.Config
 )
 
@@ -117,12 +116,8 @@ func (c *Client) readPump() {
 				sendMessage, _ := json.Marshal(requstMessage)
 
 				c.send <- []byte(string(sendMessage))
-
-				log.Println(c.logginData.Email, c.logginData.Key)
 			}
 		}
-
-		//c.send <- message
 	}
 }
 
@@ -197,7 +192,6 @@ func (c *Client) waitAutentification() {
 
 	select {
 	case <-timer.C:
-		log.Println("dont autent, time end")
 		c.disconnect()
 		break
 	case b := <-c.registr:
@@ -220,15 +214,14 @@ func (c *Client) disconnect() {
 }
 
 func typeMessage(message *[]byte) (*dataMesage, error) {
-	var thisError error
 	var inputMessage dataMesage
 
 	err := json.Unmarshal(*message, &inputMessage)
 	if err != nil {
-		thisError = err
+		return &inputMessage, err
 	}
 
-	return &inputMessage, thisError
+	return &inputMessage, nil
 }
 
 func (c *Client) logickLoggin(datMessage *dataMesage) error {
@@ -278,13 +271,10 @@ func (c *Client) logickLoggin(datMessage *dataMesage) error {
 				log.Println(bdInfo.key)
 
 				// Проверям ключи, если они не верны говорим что не верный пароль
-				if bytes.Equal(hash, bdInfo.key) == false { //newKey != bdInfo.key {
+				if bytes.Equal(hash, bdInfo.key) == false {
 					retunrError = errors.New("error key")
 					break
 				}
-
-				// Продолжение после успешной авторизации
-				//c.send <- []byte("connect")
 				log.Println("Connect")
 			}
 			break
@@ -314,8 +304,6 @@ func (c *Client) logickLoggin(datMessage *dataMesage) error {
 				retunrError = err
 				break
 			}
-
-			log.Println(infoUser)
 
 			if infoUser.Email == "" {
 				retunrError = errors.New("nil email content")
@@ -353,7 +341,7 @@ func (c *Client) logickLoggin(datMessage *dataMesage) error {
 				break
 			}
 
-			infoBd := &bdInfo{id: "0", email: c.logginData.Email, key: hash, salt: newSalt}
+			infoBd := &bdInfo{email: c.logginData.Email, key: hash, salt: newSalt}
 
 			// Если пользователя нет, то регестрируем его
 			if bdInfo0 == nil {
