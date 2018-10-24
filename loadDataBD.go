@@ -1,8 +1,8 @@
 package main
 
 import (
-	//"crypto/sha256"
 	"net/http"
+	"strconv"
 
 	"database/sql"
 	"log"
@@ -149,6 +149,6 @@ func infomydb(w http.ResponseWriter, r *http.Request) {
 			w.Write([]byte("Error scanning ticks"))
 			log.Println(err)
 		}
-		w.Write([]byte(string(id) + " -- " + email + " -- " + string(key) + " -- " + string(salt) + "\n"))
+		w.Write([]byte(strconv.Itoa(id) + " -- " + email + " -- " + string(key) + " -- " + string(salt) + "\n"))
 	}
 }
