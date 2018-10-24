@@ -87,32 +87,6 @@ func (c *Client) readPump() {
 			}
 			break
 		}
-		//message = bytes.TrimSpace(bytes.Replace(message, newline, space, -1))
-
-		//log.Println(message)
-
-		//var tt logginDataClient
-		//tt.Email = "drek2410@mail.ru"
-		//tt.Key = []byte{229, 84, 63, 202, 181, 166, 247, 93, 185, 76, 163, 119, 156, 185, 58, 90, 153, 186, 82, 88, 9, 150, 172, 35, 191, 14, 248, 244, 129, 207, 114, 226, 81, 8, 145, 97, 218, 241, 229, 123, 67, 48, 23, 245, 129, 163, 18, 213, 125, 74, 203, 11, 128, 82, 58, 114, 132, 92, 144, 246, 15, 131, 242, 202}
-
-		//b12, _ := json.Marshal(tt)
-
-		//log.Println(string(b12))
-
-		//var tt2 dataMesage
-		//tt2.RequestType = 100
-		//tt2.Message, _ = json.Marshal(tt)
-
-		//log.Println(tt2.Message)
-
-		//g, _ := json.Marshal(tt2)
-		//log.Println(string(g))
-
-		//{"requestType":101,"message":"eyJlbWFpbENsaWVudCI6ImRyZWsyNDEwQG1haWwucnUiLCJrZXkiOiIifQ=="}
-		//{"requestType":100,"message":"eyJlbWFpbENsaWVudCI6ImRyZWsyNDEwQG1haWwucnUiLCJrZXkiOiI1VlEveXJXbTkxMjVUS04zbkxrNldwbTZVbGdKbHF3anZ3NzQ5SUhQY3VKUkNKRmgydkhsZTBNd0YvV0JveExWZlVyTEM0QlNPbktFWEpEMkQ0UHl5Zz09In0="}
-
-		//log.Println(message)
-		//log.Println(string(message))
 
 		datMessage, err := typeMessage(&message)
 		if err != nil {
@@ -132,7 +106,7 @@ func (c *Client) readPump() {
 			} else {
 				// Авторизация прошла успешно
 				c.registr <- 100
-				//c.send <- []byte("authorizate")
+
 				log.Println("AUTARIZATION")
 				parseNewClient, _ := json.Marshal(c.logginData)
 
@@ -356,29 +330,33 @@ func (c *Client) logickLoggin(datMessage *dataMesage) error {
 				retunrError = err
 				break
 			}
+
+			// Генерируем ключ для него
+			newKey, err := randGenerate(64)
+			if err != nil {
+				retunrError = err
+				break
+			}
+
+			// Генерируем соль для ключа
+			newSalt, err := randGenerate(8)
+			if err != nil {
+				retunrError = err
+				break
+			}
+
+			c.logginData.Key = newKey
+
+			hash, err := hashSum(newKey, newSalt)
+			if err != nil {
+				retunrError = err
+				break
+			}
+
+			infoBd := &bdInfo{id: "0", email: c.logginData.Email, key: hash, salt: newSalt}
+
 			// Если пользователя нет, то регестрируем его
 			if bdInfo0 == nil {
-				// Генерируем ключ для него
-				newKey, err := randGenerate(64)
-				if err != nil {
-					retunrError = err
-					break
-				}
-				c.logginData.Key = newKey
-				// Генерируем соль для ключа
-				newSalt, err := randGenerate(8)
-				if err != nil {
-					retunrError = err
-					break
-				}
-
-				hash, err := hashSum(newKey, newSalt)
-				if err != nil {
-					retunrError = err
-					break
-				}
-
-				infoBd := &bdInfo{id: "0", email: c.logginData.Email, key: hash, salt: newSalt}
 				// Добавляем в бд нового пользователь
 				err = addUser(infoBd)
 				if err != nil {
@@ -386,54 +364,17 @@ func (c *Client) logickLoggin(datMessage *dataMesage) error {
 					break
 				}
 
-				// Пользователь добавлен
-
-				//				parseNewClient, _ := json.Marshal(c.logginData)
-
-				//				var requstMessage dataMesage
-				//				requstMessage.RequestType = 101
-				//				requstMessage.Message = parseNewClient
-
-				//				sendMessage, _ := json.Marshal(requstMessage)
-
-				//				c.send <- []byte(string(sendMessage))
-
-				//				log.Println(c.logginData.Email, c.logginData.Key)
-
 				log.Println("Regestration")
 
 				break
 			} else {
-				// Генерируем ключ для него
-				newKey, err := randGenerate(64)
-				if err != nil {
-					retunrError = err
-					break
-				}
-				c.logginData.Key = newKey
-				// Генерируем соль для ключа
-				newSalt, err := randGenerate(8)
-				if err != nil {
-					retunrError = err
-					break
-				}
-
-				hash, err := hashSum(newKey, newSalt)
-				if err != nil {
-					retunrError = err
-					break
-				}
-
-				infoBd := &bdInfo{id: "0", email: c.logginData.Email, key: hash, salt: newSalt}
-				// Добавляем в бд нового пользователь
+				// Обновляем в бд пользователя
 				err = updateUser(infoBd)
 				if err != nil {
 					retunrError = err
 					break
 				}
 				// Такой аккаунт уже зарегестрирован
-				// Если есть аккаунт с таким логином, генерируем новые ключ для него и высылаем его
-				//c.send <- []byte("accaunt true, return info")
 				log.Println("Re Regestration")
 				break
 			}

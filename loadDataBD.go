@@ -68,7 +68,7 @@ func addUser(infoClient *bdInfo) error {
 	}
 	defer db.Close()
 
-	log.Println(infoClient)
+	//log.Println(infoClient)
 	//
 	// IDENTITY чекнуть!!!
 	//
@@ -89,7 +89,7 @@ func updateUser(infoClient *bdInfo) error {
 	}
 	defer db.Close()
 
-	log.Println(infoClient)
+	//log.Println(infoClient)
 	//
 	// IDENTITY чекнуть!!!
 	//
@@ -120,15 +120,14 @@ func creatDB() {
 	}
 }
 
-
 func infomydb(w http.ResponseWriter, r *http.Request) {
-	
+
 	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
 	if err != nil {
 		log.Println(err)
 	}
 	defer db.Close()
-	
+
 	rows, err := db.Query("SELECT * FROM idusers")
 	if err != nil {
 		w.Write([]byte("Error reading idusers"))
@@ -142,7 +141,7 @@ func infomydb(w http.ResponseWriter, r *http.Request) {
 		var email string
 		var key []byte
 		var salt []byte
-		
+
 		if err := rows.Scan(&id, &email, &key, &salt); err != nil {
 			w.Write([]byte("Error scanning ticks"))
 			log.Println(err)
