@@ -86,6 +86,8 @@ func (c *client) readPump() {
 			c.registr <- 100
 			c.regB = true
 		}
+		
+		log.Println("InputMessage", time.Now().String())
 
 		c.inClient.Read(message)
 
