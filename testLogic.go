@@ -5,6 +5,7 @@ import (
 	"log"
 	"serviceAutorization"
 	"serviceConnection"
+	"time"
 )
 
 type Client struct {
@@ -37,6 +38,7 @@ func (c *Client) Read(data []byte) {
 			}
 			c.Write(101, parseNewClient)
 			c.autorization = true
+			log.Println("Stop", time.Now)
 		}
 	} else {
 
