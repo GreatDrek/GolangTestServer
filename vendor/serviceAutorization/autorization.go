@@ -9,6 +9,7 @@ import (
 	"bytes"
 	"errors"
 	"log"
+	"time"
 )
 
 type InfoClient struct {
