@@ -38,7 +38,7 @@ func (c *Client) Read(data []byte) {
 			}
 			c.Write(101, parseNewClient)
 			c.autorization = true
-			log.Println("Stop", time.Now)
+			log.Println("Stop", time.Now().String())
 		}
 	} else {
 

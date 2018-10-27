@@ -54,11 +54,13 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 			break
 		} else {
 			// Идем в БД для проверки данных
+			log.Println("Start BD", time.Now().String())
 			infoClient, err := checkUser(*ld, db)
 			if err != nil {
 				retunrError = err
 				break
 			}
+			log.Println("Stop BD", time.Now().String())
 			// Если бд возвращает пустого клиента, говорим что логин и пароль не верны
 			if infoClient == nil {
 				retunrError = errors.New("dont accaunt")
