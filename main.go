@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"serviceAutorization"
 	"serviceConnection"
 
 	_ "github.com/lib/pq"
@@ -49,6 +50,10 @@ func main() {
 
 	http.HandleFunc("/wss", func(w http.ResponseWriter, r *http.Request) {
 		serviceConnection.ServeWs(hub, w, r, &Client{})
+	})
+
+	http.HandleFunc("/db", func(w http.ResponseWriter, r *http.Request) {
+		serviceAutorization.CreatDB(db)
 	})
 
 	err = http.ListenAndServe(*addr, nil)
