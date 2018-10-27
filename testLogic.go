@@ -25,6 +25,7 @@ func (c *Client) Read(data []byte) {
 		return
 	}
 	if c.autorization == false {
+		log.Println("AutoStart", time.Now().String())
 		logginData, err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, db)
 		if err != nil {
 			log.Println(err)
@@ -38,7 +39,7 @@ func (c *Client) Read(data []byte) {
 			}
 			c.Write(101, parseNewClient)
 			c.autorization = true
-			log.Println("Stop", time.Now().String())
+			log.Println("AutoStop", time.Now().String())
 		}
 	} else {
 
