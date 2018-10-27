@@ -9,7 +9,7 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func checkUser(logData logginDataClient, db *sql.DB) (*InfoClient, error) {
+func checkUser(logData LogginDataClient, db *sql.DB) (*InfoClient, error) {
 	var err error
 	var infoClient *InfoClient
 

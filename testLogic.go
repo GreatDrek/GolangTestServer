@@ -24,12 +24,18 @@ func (c *Client) Read(data []byte) {
 		return
 	}
 	if c.autorization == false {
-		err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, db)
+		logginData, err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, db)
 		if err != nil {
 			log.Println(err)
 			c.connectionClient.Disconnect()
 			return
 		} else {
+			parseNewClient, err := json.Marshal(logginData)
+			if err != nil {
+				c.connectionClient.Disconnect()
+				return
+			}
+			c.Write(101, parseNewClient)
 			c.autorization = true
 		}
 	} else {
@@ -37,8 +43,19 @@ func (c *Client) Read(data []byte) {
 	}
 }
 
-func (c *Client) Write(data []byte) {
+func (c *Client) Write(typeM byte, data []byte) {
+	//parseNewClient, err := json.Marshal(c.logginData)
 
+	var requstMessage dataMesage
+	requstMessage.RequestType = typeM
+	requstMessage.Message = data
+
+	sendMessage, err := json.Marshal(requstMessage)
+	if err != nil {
+		c.connectionClient.Disconnect()
+		return
+	}
+	c.connectionClient.Write(sendMessage)
 }
 
 type dataMesage struct {

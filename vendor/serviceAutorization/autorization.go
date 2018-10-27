@@ -18,31 +18,31 @@ type InfoClient struct {
 	Salt  []byte
 }
 
-type logginDataClient struct {
+type LogginDataClient struct {
 	Email string `json:"emailClient"`
 	Key   []byte `json:"key"`
 }
 
-func Autorization(requestType byte, data []byte, db *sql.DB) error {
-	var logginData *logginDataClient
+func Autorization(requestType byte, data []byte, db *sql.DB) (*LogginDataClient, error) {
+	var logginData *LogginDataClient
 	err := json.Unmarshal(data, &logginData)
 	if err != nil {
-		return err
+		return logginData, err
 	}
 
 	if logginData == nil {
-		return errors.New("Error logginData 101")
+		return logginData, errors.New("Error logginData 101")
 	}
 
 	err = logickLoggin(requestType, logginData, db)
 	if err != nil {
-		return err
+		return logginData, err
 	}
 
-	return nil
+	return logginData, nil
 }
 
-func logickLoggin(requestType byte, ld *logginDataClient, db *sql.DB) error {
+func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 	var retunrError error
 
 	switch requestType {
