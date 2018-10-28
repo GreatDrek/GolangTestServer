@@ -9,18 +9,18 @@ import (
 )
 
 type Client struct {
-	connectionClient *serviceConnection.ConnectionClient
-	autorization     bool
+	*serviceConnection.Сlient
+	autorization bool
 }
 
-func (c *Client) Inicialization(connectionClient *serviceConnection.ConnectionClient) {
-	c.connectionClient = connectionClient
+func (c *Client) Inicialization(connectionClient *serviceConnection.Сlient) {
+	c.Сlient = connectionClient
 }
 
 func (c *Client) Read(data []byte) {
 	datMessage, err := typeMessage(&data)
 	if err != nil {
-		c.connectionClient.Disconnect()
+		c.Disconnect()
 		log.Println(err)
 		return
 	}
@@ -29,15 +29,15 @@ func (c *Client) Read(data []byte) {
 		logginData, err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, db)
 		if err != nil {
 			log.Println(err)
-			c.connectionClient.Disconnect()
+			c.Disconnect()
 			return
 		} else {
 			parseNewClient, err := json.Marshal(logginData)
 			if err != nil {
-				c.connectionClient.Disconnect()
+				c.Disconnect()
 				return
 			}
-			c.Write(101, parseNewClient)
+			c.WriteData(101, parseNewClient)
 			c.autorization = true
 			log.Println("AutoStop", time.Now().String())
 		}
@@ -46,19 +46,17 @@ func (c *Client) Read(data []byte) {
 	}
 }
 
-func (c *Client) Write(typeM byte, data []byte) {
-	//parseNewClient, err := json.Marshal(c.logginData)
-
+func (c *Client) WriteData(typeM byte, data []byte) {
 	var requstMessage dataMesage
 	requstMessage.RequestType = typeM
 	requstMessage.Message = data
 
 	sendMessage, err := json.Marshal(requstMessage)
 	if err != nil {
-		c.connectionClient.Disconnect()
+		c.Disconnect()
 		return
 	}
-	c.connectionClient.Write(sendMessage)
+	c.Write(sendMessage)
 }
 
 type dataMesage struct {

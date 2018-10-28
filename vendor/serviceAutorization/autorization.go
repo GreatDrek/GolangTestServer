@@ -174,32 +174,6 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 	return retunrError
 }
 
-//func Test() {
-
-//	if c.logginData == nil {
-//		err = c.logickLoggin(datMessage)
-//		if err != nil {
-//			c.registr <- 100
-//			log.Println(err)
-//			break
-//		} else {
-//			// Авторизация прошла успешно
-//			c.registr <- 100
-
-//			log.Println("AUTARIZATION")
-//			parseNewClient, _ := json.Marshal(c.logginData)
-
-//			var requstMessage dataMesage
-//			requstMessage.RequestType = 101
-//			requstMessage.Message = parseNewClient
-
-//			sendMessage, _ := json.Marshal(requstMessage)
-
-//			c.send <- []byte(string(sendMessage))
-//		}
-//	}
-//}
-
 func randGenerate(lenght byte) ([]byte, error) {
 	b := make([]byte, lenght)
 	_, err := rand.Read(b)

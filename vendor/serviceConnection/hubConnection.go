@@ -1,18 +1,18 @@
 package serviceConnection
 
 type Hub struct {
-	clients map[*client]bool
+	clients map[*Сlient]bool
 
-	register chan *client
+	register chan *Сlient
 
-	unregister chan *client
+	unregister chan *Сlient
 }
 
 func NewHub() *Hub {
 	return &Hub{
-		register:   make(chan *client),
-		unregister: make(chan *client),
-		clients:    make(map[*client]bool),
+		register:   make(chan *Сlient),
+		unregister: make(chan *Сlient),
+		clients:    make(map[*Сlient]bool),
 	}
 }
 

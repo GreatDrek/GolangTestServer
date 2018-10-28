@@ -33,23 +33,19 @@ var upgrader = websocket.Upgrader{
 
 type iClient interface {
 	Read([]byte)
-	Inicialization(*ConnectionClient)
+	Inicialization(*Сlient)
 }
 
-type ConnectionClient struct {
-	c *client
+func (c *Сlient) Write(data []byte) {
+	c.send <- data
 }
 
-func (connectionClient *ConnectionClient) Write(data []byte) {
-	connectionClient.c.send <- data
-}
-
-func (connectionClient *ConnectionClient) Disconnect() {
-	connectionClient.c.disconnect()
+func (c *Сlient) Disconnect() {
+	c.disconnect()
 }
 
 // Client is a middleman between the websocket connection and the hub.
-type client struct {
+type Сlient struct {
 	hub *Hub
 
 	// The websocket connection.
@@ -65,7 +61,7 @@ type client struct {
 	regB bool
 }
 
-func (c *client) readPump() {
+func (c *Сlient) readPump() {
 	defer func() {
 		log.Println("End readPump")
 		c.disconnect()
@@ -86,7 +82,7 @@ func (c *client) readPump() {
 			c.registr <- 100
 			c.regB = true
 		}
-		
+
 		log.Println("InputMessage", time.Now().String())
 
 		c.inClient.Read(message)
@@ -94,7 +90,7 @@ func (c *client) readPump() {
 	}
 }
 
-func (c *client) writePump() {
+func (c *Сlient) writePump() {
 	ticker := time.NewTicker(pingPeriod)
 	defer func() {
 		ticker.Stop()
@@ -147,10 +143,10 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request, iC iClient) {
 		return
 	}
 
-	client := &client{hub: hub, conn: conn, send: make(chan []byte, 256), inClient: iC}
+	client := &Сlient{hub: hub, conn: conn, send: make(chan []byte, 256), inClient: iC}
 	client.hub.register <- client
 
-	iC.Inicialization(&ConnectionClient{client})
+	iC.Inicialization(client)
 
 	go client.writePump()
 	go client.readPump()
@@ -158,7 +154,7 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request, iC iClient) {
 	log.Println("EndServerWs", time.Now().String())
 }
 
-func (c *client) waitAutentification() {
+func (c *Сlient) waitAutentification() {
 	c.registr = make(chan byte)
 	defer func() {
 		close(c.registr)
@@ -185,7 +181,7 @@ func (c *client) waitAutentification() {
 	}
 }
 
-func (c *client) disconnect() {
+func (c *Сlient) disconnect() {
 	c.hub.unregister <- c
 	c.conn.Close()
 }
