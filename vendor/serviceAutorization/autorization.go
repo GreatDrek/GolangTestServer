@@ -75,6 +75,8 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 					retunrError = errors.New("error key")
 					break
 				}
+
+				ld.Id = infoClient.Id
 				log.Println("Connect")
 			}
 			break
