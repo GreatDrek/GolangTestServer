@@ -139,13 +139,14 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 			// Если пользователя нет, то регистрируем его
 			if _infoClient == nil {
 				// Добавляем в бд нового пользователь
-				err = addUser(infoClient, db)
-				if err != nil {
-					retunrError = err
+				id, _ := addUser(infoClient, db)
+				if id == 0 {
+					retunrError = errors.New("error add bd")
 					break
 				}
 
 				log.Println("Regestration")
+				ld.Id = id
 
 				break
 			} else {
@@ -157,6 +158,7 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 				}
 				// Такой аккаунт уже зарегистрирован
 				log.Println("Re Regestration")
+				ld.Id = _infoClient.Id
 				break
 			}
 		}

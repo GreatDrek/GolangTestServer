@@ -2,7 +2,7 @@ package serviceAutorization
 
 import (
 	"database/sql"
-	"log"
+	//"log"
 
 	//"os"
 
@@ -11,7 +11,6 @@ import (
 
 func checkUser(logData LogginDataClient, db *sql.DB) (*LogginDataClient, error) {
 	var err error
-	//var infoClient *InfoClient
 
 	rows, err := db.Query("SELECT id, email, key, salt FROM idusers WHERE email = $1", logData.Email)
 	if err != nil {
@@ -20,16 +19,10 @@ func checkUser(logData LogginDataClient, db *sql.DB) (*LogginDataClient, error) 
 
 	defer rows.Close()
 
-	//	var id int
-	//	var email string
-	//	var key []byte
-	//	var salt []byte
-
 	for rows.Next() {
 		if err = rows.Scan(&logData.Id, &logData.Email, &logData.Key, &logData.Salt); err != nil {
 			return nil, err
 		} else {
-			//infoClient = &InfoClient{Id: id, Email: email, Key: key, Salt: salt}
 			return &logData, err
 		}
 	}
@@ -37,14 +30,16 @@ func checkUser(logData LogginDataClient, db *sql.DB) (*LogginDataClient, error) 
 	return nil, err
 }
 
-func addUser(infoClient *LogginDataClient, db *sql.DB) error {
+func addUser(infoClient *LogginDataClient, db *sql.DB) (int, error) {
 	var err error
+	var id int
 
-	if _, err := db.Exec("INSERT INTO idusers (email, key, salt) VALUES ($1, $2, $3)", infoClient.Email, infoClient.Key, infoClient.Salt); err != nil {
-		log.Println("test", err)
-		return err
-	}
-	return err
+	/*if _, err := */
+	db.QueryRow("INSERT INTO idusers (email, key, salt) VALUES ($1, $2, $3) returning id", infoClient.Email, infoClient.Key, infoClient.Salt).Scan(&id) /*err != nil {*/
+	//		log.Println("test", err)
+	//		return 0, err
+	//	}
+	return id, err
 }
 
 func updateUser(infoClient *LogginDataClient, db *sql.DB) error {
