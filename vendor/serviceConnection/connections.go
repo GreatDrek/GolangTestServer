@@ -34,6 +34,7 @@ var upgrader = websocket.Upgrader{
 type iClient interface {
 	Read([]byte)
 	Inicialization(*Сlient)
+	ClientDisconnect()
 }
 
 func (c *Сlient) Write(data []byte) {
@@ -82,8 +83,6 @@ func (c *Сlient) readPump() {
 			c.registr <- 100
 			c.regB = true
 		}
-
-		log.Println("InputMessage", time.Now().String())
 
 		c.inClient.Read(message)
 
@@ -135,7 +134,6 @@ func (c *Сlient) writePump() {
 
 // serveWs handles websocket requests from the peer.
 func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request, iC iClient) {
-	log.Println("StartServerWs", time.Now().String())
 
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
@@ -151,7 +149,6 @@ func ServeWs(hub *Hub, w http.ResponseWriter, r *http.Request, iC iClient) {
 	go client.writePump()
 	go client.readPump()
 	go client.waitAutentification()
-	log.Println("EndServerWs", time.Now().String())
 }
 
 func (c *Сlient) waitAutentification() {

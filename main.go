@@ -9,8 +9,6 @@ import (
 	"serviceAutorization"
 	"serviceConnection"
 
-	"time"
-
 	_ "github.com/lib/pq"
 )
 
@@ -52,7 +50,6 @@ func main() {
 	http.HandleFunc("/", serveHome)
 
 	http.HandleFunc("/wss", func(w http.ResponseWriter, r *http.Request) {
-		log.Println("Start", time.Now().String())
 		serviceConnection.ServeWs(hub, w, r, &Client{})
 	})
 

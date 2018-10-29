@@ -11,6 +11,12 @@ import (
 type Client struct {
 	*serviceConnection.Сlient
 	autorization bool
+	id           int
+	infoPlayer   *InfoPlayer
+}
+
+func (c *Client) ClientDisconnect() {
+	log.Println("Client Disconnect")
 }
 
 func (c *Client) Inicialization(connectionClient *serviceConnection.Сlient) {
@@ -27,7 +33,6 @@ func (c *Client) Read(data []byte) {
 	if c.autorization == false {
 		log.Println("AutoStart", time.Now().String())
 		logginData, err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, db)
-		log.Println(logginData)
 		if err != nil {
 			log.Println(err)
 			c.Disconnect()
@@ -40,10 +45,11 @@ func (c *Client) Read(data []byte) {
 			}
 			c.WriteData(101, parseNewClient)
 			c.autorization = true
+			c.id = logginData.Id
 			log.Println("AutoStop", time.Now().String())
 		}
 	} else {
-		// Если клиент авторизованн ожидаем данных от него
+		// Если клиент авторизованн ожидаем данные от него
 	}
 }
 

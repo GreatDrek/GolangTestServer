@@ -23,6 +23,7 @@ func (h *Hub) Run() {
 			h.clients[clientHub] = true
 		case clientHub := <-h.unregister:
 			if _, ok := h.clients[clientHub]; ok {
+				clientHub.inClient.ClientDisconnect()
 				delete(h.clients, clientHub)
 				close(clientHub.send)
 			}
