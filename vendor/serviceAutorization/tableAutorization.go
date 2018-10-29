@@ -28,12 +28,13 @@ func checkUser(logData LogginDataClient, db *sql.DB) (*LogginDataClient, error) 
 	for rows.Next() {
 		if err = rows.Scan(&logData.Id, &logData.Email, &logData.Key, &logData.Salt); err != nil {
 			return nil, err
-		} /* else {
-			infoClient = &InfoClient{Id: id, Email: email, Key: key, Salt: salt}
-		}*/
+		} else {
+			//infoClient = &InfoClient{Id: id, Email: email, Key: key, Salt: salt}
+			return logData, err
+		}
 	}
 
-	return &logData, err
+	return nil, err
 }
 
 func addUser(infoClient *LogginDataClient, db *sql.DB) error {
