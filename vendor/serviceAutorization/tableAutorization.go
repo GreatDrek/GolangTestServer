@@ -30,7 +30,7 @@ func checkUser(logData LogginDataClient, db *sql.DB) (*LogginDataClient, error) 
 			return nil, err
 		} else {
 			//infoClient = &InfoClient{Id: id, Email: email, Key: key, Salt: salt}
-			return logData, err
+			return &logData, err
 		}
 	}
 
