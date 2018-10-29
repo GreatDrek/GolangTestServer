@@ -27,6 +27,7 @@ func (c *Client) Read(data []byte) {
 	if c.autorization == false {
 		log.Println("AutoStart", time.Now().String())
 		logginData, err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, db)
+		log.Println(logginData)
 		if err != nil {
 			log.Println(err)
 			c.Disconnect()
@@ -42,7 +43,7 @@ func (c *Client) Read(data []byte) {
 			log.Println("AutoStop", time.Now().String())
 		}
 	} else {
-
+		// Если клиент авторизованн ожидаем данных от него
 	}
 }
 

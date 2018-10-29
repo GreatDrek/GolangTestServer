@@ -9,9 +9,9 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func checkUser(logData LogginDataClient, db *sql.DB) (*InfoClient, error) {
+func checkUser(logData LogginDataClient, db *sql.DB) (*LogginDataClient, error) {
 	var err error
-	var infoClient *InfoClient
+	//var infoClient *InfoClient
 
 	rows, err := db.Query("SELECT id, email, key, salt FROM idusers WHERE email = $1", logData.Email)
 	if err != nil {
@@ -20,23 +20,23 @@ func checkUser(logData LogginDataClient, db *sql.DB) (*InfoClient, error) {
 
 	defer rows.Close()
 
-	var id int
-	var email string
-	var key []byte
-	var salt []byte
+	//	var id int
+	//	var email string
+	//	var key []byte
+	//	var salt []byte
 
 	for rows.Next() {
-		if err = rows.Scan(&id, &email, &key, &salt); err != nil {
+		if err = rows.Scan(&logData.Id, &logData.Email, &logData.Key, &logData.Salt); err != nil {
 			return nil, err
-		} else {
+		} /* else {
 			infoClient = &InfoClient{Id: id, Email: email, Key: key, Salt: salt}
-		}
+		}*/
 	}
 
-	return infoClient, err
+	return &logData, err
 }
 
-func addUser(infoClient *InfoClient, db *sql.DB) error {
+func addUser(infoClient *LogginDataClient, db *sql.DB) error {
 	var err error
 
 	if _, err := db.Exec("INSERT INTO idusers (email, key, salt) VALUES ($1, $2, $3)", infoClient.Email, infoClient.Key, infoClient.Salt); err != nil {
@@ -46,7 +46,7 @@ func addUser(infoClient *InfoClient, db *sql.DB) error {
 	return err
 }
 
-func updateUser(infoClient *InfoClient, db *sql.DB) error {
+func updateUser(infoClient *LogginDataClient, db *sql.DB) error {
 	var err error
 
 	_, err = db.Exec("UPDATE idusers SET key = $1, salt = $2 WHERE email = $3", infoClient.Key, infoClient.Salt, infoClient.Email)

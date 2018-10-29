@@ -20,6 +20,7 @@ var (
 )
 
 func main() {
+
 	//connStr := "user=postgres password=37352410 dbname=postgres sslmode=disable"
 	//db, err = sql.Open("postgres", connStr)
 

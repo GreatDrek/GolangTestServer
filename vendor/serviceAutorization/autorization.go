@@ -12,16 +12,11 @@ import (
 	"time"
 )
 
-type InfoClient struct {
-	Id    int
-	Email string
-	Key   []byte
-	Salt  []byte
-}
-
 type LogginDataClient struct {
+	Id    int    `json:"-"`
 	Email string `json:"emailClient"`
 	Key   []byte `json:"key"`
+	Salt  []byte `json:"-"`
 }
 
 func Autorization(requestType byte, data []byte, db *sql.DB) (*LogginDataClient, error) {
@@ -87,7 +82,6 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 		break
 
 	case 101: // Запрос регистрации
-		// Временная реализация для проверки коннекта
 
 		// Проверяем что бы логин не был нулевым
 		if ld.Email == "" {
@@ -138,9 +132,9 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 				break
 			}
 
-			infoClient := &InfoClient{Email: ld.Email, Key: hash, Salt: newSalt}
+			infoClient := &LogginDataClient{Email: ld.Email, Key: hash, Salt: newSalt}
 
-			// Если пользователя нет, то регестрируем его
+			// Если пользователя нет, то регистрируем его
 			if _infoClient == nil {
 				// Добавляем в бд нового пользователь
 				err = addUser(infoClient, db)
@@ -159,12 +153,11 @@ func logickLoggin(requestType byte, ld *LogginDataClient, db *sql.DB) error {
 					retunrError = err
 					break
 				}
-				// Такой аккаунт уже зарегестрирован
+				// Такой аккаунт уже зарегистрирован
 				log.Println("Re Regestration")
 				break
 			}
 		}
-		//retunrError = errors.New("101")
 		break
 
 	default:
