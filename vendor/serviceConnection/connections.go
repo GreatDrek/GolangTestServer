@@ -1,8 +1,10 @@
 package serviceConnection
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
+	"serviceAutorization"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -31,14 +33,39 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 }
 
-type iClient interface {
-	Read([]byte)
-	Inicialization(*Сlient)
-	ClientDisconnect()
+type dataMesage struct {
+	RequestType byte   `json:"requestType"`
+	Message     []byte `json:"message"`
 }
 
-func (c *Сlient) Write(data []byte) {
-	c.send <- data
+func typeMessage(data *[]byte) (*dataMesage, error) {
+	var inputMessage dataMesage
+
+	err := json.Unmarshal(*data, &inputMessage)
+	if err != nil {
+		return &inputMessage, err
+	}
+
+	return &inputMessage, nil
+}
+
+func (c *Сlient) Write(typeM byte, data []byte) {
+	var requstMessage dataMesage
+	requstMessage.RequestType = typeM
+	requstMessage.Message = data
+
+	sendMessage, err := json.Marshal(requstMessage)
+	if err != nil {
+		c.Disconnect()
+		return
+	}
+	c.send <- sendMessage
+}
+
+type iClient interface {
+	Read(byte, []byte)
+	Inicialization(*Сlient)
+	ClientDisconnect()
 }
 
 func (c *Сlient) Disconnect() {
@@ -60,6 +87,8 @@ type Сlient struct {
 	inClient iClient
 
 	regB bool
+
+	Id int
 }
 
 func (c *Сlient) readPump() {
@@ -79,13 +108,29 @@ func (c *Сlient) readPump() {
 			break
 		}
 
+		datMessage, err := typeMessage(&message)
+		if err != nil {
+			break
+		}
+
 		if c.regB == false {
 			c.registr <- 100
+			logginData, err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, c.hub.Db)
+			if err != nil {
+				log.Println(err)
+				break
+			} else {
+				parseNewClient, err := json.Marshal(logginData)
+				if err != nil {
+					break
+				}
+				c.Write(101, parseNewClient)
+				c.Id = logginData.Id
+			}
 			c.regB = true
 		}
 
-		c.inClient.Read(message)
-
+		c.inClient.Read(datMessage.RequestType, datMessage.Message)
 	}
 }
 

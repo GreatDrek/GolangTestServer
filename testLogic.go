@@ -1,95 +1,22 @@
 package main
 
 import (
-	"encoding/json"
 	"log"
-	"serviceAutorization"
 	"serviceConnection"
-	"time"
 )
 
 type Client struct {
 	*serviceConnection.Сlient
-	autorization bool
-	id           int
-	player       *Player
 }
 
 func (c *Client) ClientDisconnect() {
 	log.Println("Client Disconnect")
-	if c.player != nil {
-		world.unregister <- c.player
-	}
 }
 
 func (c *Client) Inicialization(connectionClient *serviceConnection.Сlient) {
 	c.Сlient = connectionClient
 }
 
-func (c *Client) Read(data []byte) {
-	datMessage, err := typeMessage(&data)
-	if err != nil {
-		c.Disconnect()
-		log.Println(err)
-		return
-	}
-	if c.autorization == false {
-		log.Println("AutoStart", time.Now().String())
-		logginData, err := serviceAutorization.Autorization(datMessage.RequestType, datMessage.Message, db)
-		if err != nil {
-			log.Println(err)
-			c.Disconnect()
-			return
-		} else {
-			parseNewClient, err := json.Marshal(logginData)
-			if err != nil {
-				c.Disconnect()
-				return
-			}
-			c.WriteData(101, parseNewClient)
-			c.autorization = true
-			c.id = logginData.Id
+func (c *Client) Read(typeRequest byte, data []byte) {
 
-			log.Println("AutoStop", time.Now().String())
-
-			c.player = &Player{id: c.id, posX: 0, posY: 0, client: c}
-			world.register <- c.player
-		}
-	} else {
-		//		 Если клиент авторизованн ожидаем данные от него
-		if c.player != nil {
-			c.player.InputPackage(datMessage.RequestType, datMessage.Message)
-		} else {
-			c.Disconnect()
-		}
-	}
-}
-
-func (c *Client) WriteData(typeM byte, data []byte) {
-	var requstMessage dataMesage
-	requstMessage.RequestType = typeM
-	requstMessage.Message = data
-
-	sendMessage, err := json.Marshal(requstMessage)
-	if err != nil {
-		c.Disconnect()
-		return
-	}
-	c.Write(sendMessage)
-}
-
-type dataMesage struct {
-	RequestType byte   `json:"requestType"`
-	Message     []byte `json:"message"`
-}
-
-func typeMessage(data *[]byte) (*dataMesage, error) {
-	var inputMessage dataMesage
-
-	err := json.Unmarshal(*data, &inputMessage)
-	if err != nil {
-		return &inputMessage, err
-	}
-
-	return &inputMessage, nil
 }

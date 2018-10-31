@@ -13,9 +13,8 @@ import (
 )
 
 var (
-	addr  *string
-	db    *sql.DB
-	world *World
+	addr *string
+	db   *sql.DB
 )
 
 func main() {
@@ -43,14 +42,8 @@ func main() {
 
 	flag.Parse()
 
-	//hub := newHub()
-	world = newWorld()
-
-	go world.run()
-
-	go world.BrodcastClients()
-
 	hub := serviceConnection.NewHub()
+	hub.Db = db
 
 	go hub.Run()
 

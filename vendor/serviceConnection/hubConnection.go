@@ -1,11 +1,17 @@
 package serviceConnection
 
+import (
+	"database/sql"
+)
+
 type Hub struct {
 	clients map[*Сlient]bool
 
 	register chan *Сlient
 
 	unregister chan *Сlient
+
+	Db *sql.DB
 }
 
 func NewHub() *Hub {
