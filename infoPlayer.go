@@ -18,7 +18,7 @@ func (iP *InfoPlayer) LoadInfo(id int, db *sql.DB) error {
 		return err
 	}
 
-	if iP == nil {
+	if iP.Gold < 0 {
 		_, err = db.Exec("INSERT INTO "+NameTableInfoPlayer+" (id, gold) VALUES ($1, $2)", id, 0)
 		if err != nil {
 			return err
