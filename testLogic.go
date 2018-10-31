@@ -12,11 +12,14 @@ type Client struct {
 	*serviceConnection.Сlient
 	autorization bool
 	id           int
-	infoPlayer   *InfoPlayer
+	player       *Player
 }
 
 func (c *Client) ClientDisconnect() {
 	log.Println("Client Disconnect")
+	if c.player != nil {
+		world.unregister <- c.player
+	}
 }
 
 func (c *Client) Inicialization(connectionClient *serviceConnection.Сlient) {
@@ -46,10 +49,19 @@ func (c *Client) Read(data []byte) {
 			c.WriteData(101, parseNewClient)
 			c.autorization = true
 			c.id = logginData.Id
+
 			log.Println("AutoStop", time.Now().String())
+
+			c.player = &Player{id: c.id, posX: 0, posY: 0, client: c}
+			world.register <- c.player
 		}
 	} else {
-		// Если клиент авторизованн ожидаем данные от него
+		//		 Если клиент авторизованн ожидаем данные от него
+		if c.player != nil {
+			c.player.InputPackage(datMessage.RequestType, datMessage.Message)
+		} else {
+			c.Disconnect()
+		}
 	}
 }
 
