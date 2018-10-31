@@ -11,7 +11,7 @@ type Client struct {
 }
 
 func (c *Client) AutorizationCompleted() {
-	c.infoPlayer = InfoPlayer{Gold: -1}
+	c.infoPlayer = &InfoPlayer{Gold: -1}
 	err := c.infoPlayer.LoadInfo(c.Id, db)
 	if err != nil {
 		log.Println(err)
