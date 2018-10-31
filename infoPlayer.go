@@ -15,17 +15,17 @@ func (iP *InfoPlayer) LoadInfo(id int, db *sql.DB) error {
 	row := db.QueryRow("SELECT id, gold FROM "+NameTableInfoPlayer+" WHERE id = $1", id)
 	err := row.Scan(&id, &iP.Gold)
 	if err != nil {
-		return err
-	}
-
-	if iP.Gold < 0 {
-		_, err = db.Exec("INSERT INTO "+NameTableInfoPlayer+" (id, gold) VALUES ($1, $2)", id, 0)
-		if err != nil {
+		if err.Error() == "sql: no rows in result set"{
+			_, err = db.Exec("INSERT INTO "+NameTableInfoPlayer+" (id, gold) VALUES ($1, $2)", id, 0)
+			if err != nil {
+				return err
+			}
+			iP.Gold = 0
+			log.Println("Add info")
+		}else{
 			return err
 		}
-		iP.Gold = 0
-		log.Println("Add info")
-	} else {
+	}else{
 		log.Println("Load info")
 	}
 
