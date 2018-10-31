@@ -18,7 +18,7 @@ func (c *Client) AutorizationCompleted() {
 		c.Disconnect()
 	}
 	log.Println(c.infoPlayer)
-	c.infoPlayer.Gold = +100
+	c.infoPlayer.Gold += 100
 	err = c.infoPlayer.SaveInfo(c.Id, db)
 	if err != nil {
 		c.Disconnect()
