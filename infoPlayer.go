@@ -13,7 +13,7 @@ type InfoPlayer struct {
 
 func (iP *InfoPlayer) LoadInfo(id int, db *sql.DB) error {
 	row := db.QueryRow("SELECT id, gold FROM "+NameTableInfoPlayer+" WHERE id = $1", id)
-	err := row.Scan(&iP.Gold)
+	err := row.Scan(&id, &iP.Gold)
 	if err != nil {
 		return err
 	}
