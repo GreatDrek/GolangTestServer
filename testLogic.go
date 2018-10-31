@@ -3,26 +3,25 @@ package main
 import (
 	"log"
 	"serviceConnection"
+	"serviceInfoPlayer"
 )
 
 type Client struct {
 	*serviceConnection.Сlient
-	infoPlayer *InfoPlayer
+	infoPlayer *serviceInfoPlayer.InfoPlayer
 }
 
 func (c *Client) AutorizationCompleted() {
-	c.infoPlayer = &InfoPlayer{Gold: -1}
+	c.infoPlayer = &serviceInfoPlayer.InfoPlayer{Gold: -1}
 	err := c.infoPlayer.LoadInfo(c.Id, db)
 	if err != nil {
 		log.Println(err)
 		c.Disconnect()
 	}
-	log.Println(c.infoPlayer)
-	c.infoPlayer.Gold += 100
-	err = c.infoPlayer.SaveInfo(c.Id, db)
-	if err != nil {
-		c.Disconnect()
-	}
+	//	err = c.infoPlayer.SaveInfo(c.Id, db)
+	//	if err != nil {
+	//		c.Disconnect()
+	//	}
 	log.Println(c.infoPlayer)
 }
 
