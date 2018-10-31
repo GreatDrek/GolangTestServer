@@ -25,7 +25,7 @@ func (c *Client) AutorizationCompleted() {
 		c.Disconnect()
 	}
 	c.Write(110, data)
-	log.Println(string(*data))
+	//log.Println(string(*data))
 }
 
 // Вызывается, если клиент отключился
