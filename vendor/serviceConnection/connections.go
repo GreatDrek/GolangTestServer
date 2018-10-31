@@ -49,10 +49,10 @@ func typeMessage(data *[]byte) (*dataMesage, error) {
 	return &inputMessage, nil
 }
 
-func (c *Сlient) Write(typeM byte, data []byte) {
+func (c *Сlient) Write(typeM byte, data *[]byte) {
 	var requstMessage dataMesage
 	requstMessage.RequestType = typeM
-	requstMessage.Message = data
+	requstMessage.Message = *data
 
 	sendMessage, err := json.Marshal(requstMessage)
 	if err != nil {
@@ -125,7 +125,7 @@ func (c *Сlient) readPump() {
 				if err != nil {
 					break
 				}
-				c.Write(101, parseNewClient)
+				c.Write(101, &parseNewClient)
 				c.Id = logginData.Id
 			}
 			c.inClient.AutorizationCompleted()

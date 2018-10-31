@@ -22,8 +22,12 @@ func (c *Client) AutorizationCompleted() {
 	//	if err != nil {
 	//		c.Disconnect()
 	//	}
-	log.Println(c.infoPlayer)
-	log.Println(c.infoPlayer.ReturnDataInfo())
+	data, err := c.infoPlayer.ReturnDataInfo()
+	if err != nil {
+		c.Disconnect()
+	}
+	c.Write(110, data)
+	log.Println(string(*data))
 }
 
 func (c *Client) ClientDisconnect() {

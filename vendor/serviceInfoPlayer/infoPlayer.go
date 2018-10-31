@@ -41,10 +41,10 @@ func (iP *InfoPlayer) SaveInfo(id int, db *sql.DB) error {
 	return nil
 }
 
-func (iP *InfoPlayer) ReturnDataInfo() ([]byte, error) {
+func (iP *InfoPlayer) ReturnDataInfo() (*[]byte, error) {
 	data, err := json.Marshal(iP)
 	if err != nil {
 		return nil, err
 	}
-	return data, nil
+	return &data, nil
 }
