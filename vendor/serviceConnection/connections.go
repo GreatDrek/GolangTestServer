@@ -56,7 +56,7 @@ func (c *Сlient) Write(typeM byte, data []byte) {
 
 	sendMessage, err := json.Marshal(requstMessage)
 	if err != nil {
-		c.Disconnect()
+		c.disconnect()
 		return
 	}
 	c.send <- sendMessage
@@ -66,6 +66,7 @@ type iClient interface {
 	Read(byte, []byte)
 	Inicialization(*Сlient)
 	ClientDisconnect()
+	AutorizationCompleted()
 }
 
 func (c *Сlient) Disconnect() {
@@ -127,6 +128,7 @@ func (c *Сlient) readPump() {
 				c.Write(101, parseNewClient)
 				c.Id = logginData.Id
 			}
+			c.inClient.AutorizationCompleted()
 			c.regB = true
 		}
 
