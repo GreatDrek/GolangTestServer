@@ -2,6 +2,7 @@ package serviceInfoPlayer
 
 import (
 	"database/sql"
+	"encoding/json"
 	"log"
 )
 
@@ -38,4 +39,12 @@ func (iP *InfoPlayer) SaveInfo(id int, db *sql.DB) error {
 		return err
 	}
 	return nil
+}
+
+func (iP *InfoPlayer) ReturnDataInfo() ([]byte, error) {
+	data, err := json.Marshal(iP)
+	if err != nil {
+		return nil, err
+	}
+	return data, nil
 }

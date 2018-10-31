@@ -23,6 +23,7 @@ func (c *Client) AutorizationCompleted() {
 	//		c.Disconnect()
 	//	}
 	log.Println(c.infoPlayer)
+	log.Println(c.infoPlayer.ReturnDataInfo())
 }
 
 func (c *Client) ClientDisconnect() {
