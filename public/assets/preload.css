@@ -1,0 +1,127 @@
+.preloader{
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: black;
+	z-index: 999;
+	
+	transition: 1s all;
+	opacity: 1;
+	visibility: visible;
+	
+	
+	&.done{
+		width: 10%;
+		opacity: 0;
+		visibility: hidden;
+		z-index: 0;
+	}
+}
+
+.done{
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: black;
+	z-index: 999;
+	
+	opacity: 0;
+	visibility: hidden;
+	z-index: 0;
+}
+
+.loader{
+	width: 175px;
+	height: 175px;
+	position: absolute;
+	left: 40%;
+	top: 40%;
+}
+
+.preloader .done{
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background: black;
+	z-index: 999;
+	
+	opacity: 0;
+	visibility: hidden;
+	z-index: 0;
+}
+
+.unVisible{
+	opacity: 0;
+	visibility: hidden;
+	z-index: 0;
+}
+
+
+
+
+:root {
+    --animation-time: 2s; 
+	--pos-top: 50%;
+}
+
+@keyframes go-left-right {   /* назовём анимацию: "go-left-right" */
+    from {
+	  top: 45%;
+    }
+    to {
+     
+	  top: 55%;
+    }
+  }
+  
+  @keyframes go-left-right0 {   /* назовём анимацию: "go-left-right" */
+    from {
+	  top: 55%;
+    }
+    to {
+     
+	  top: 45%;
+    }
+  }
+  
+#loadTest{
+	animation: go-left-right 1s infinite alternate;
+
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	
+	-webkit-transition: width 1s, height 1s, top 1s; /* For Safari 3.1 to 6.0 */
+    transition: width 1s, height 1s, top (--animation-time);
+}
+
+#loadTest0{
+	animation: go-left-right0 1s infinite alternate;
+
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	
+	-webkit-transition: width 1s, height 1s, top 1s; /* For Safari 3.1 to 6.0 */
+    transition: width 1s, height 1s, top (--animation-time);
+}
+
+#growing {
+	animation: go-left-right 1s infinite alternate;
+	
+	position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+	
+    -webkit-transition: width 1s; /* For Safari 3.1 to 6.0 */
+    transition: width 1s;
+}

@@ -3,9 +3,15 @@ package main
 import (
 	"database/sql"
 	"flag"
+
+	//"time"
+
+	//"html/template"
 	"log"
 	"net/http"
 	"os"
+
+	//"path"
 	"serviceAutorization"
 	"serviceConnection"
 
@@ -47,7 +53,10 @@ func main() {
 
 	go hub.Run()
 
-	http.HandleFunc("/", serveHome)
+	http.HandleFunc("/u", serveHome)
+
+	fs := http.FileServer(http.Dir("./public/"))
+	http.Handle("/test/", http.StripPrefix("/test/", fs))
 
 	http.HandleFunc("/wss", func(w http.ResponseWriter, r *http.Request) {
 		serviceConnection.ServeWs(hub, w, r, &Client{})
@@ -65,7 +74,7 @@ func main() {
 
 func serveHome(w http.ResponseWriter, r *http.Request) {
 	log.Println(r.URL)
-	if r.URL.Path != "/" {
+	if r.URL.Path != "/u" {
 		http.Error(w, "Not found", http.StatusNotFound)
 		return
 	}
