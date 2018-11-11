@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="./logo.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    Material Kit by Creative Tim
+    Photo Room
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -19,6 +19,9 @@
   <link href="./assets/demo/demo.css" rel="stylesheet" />
   
   <link href="./assets/preload.css" rel="stylesheet" />
+  
+ <!-- <link rel="import" href="/test/header.html">-->
+	<script src="./assets/js/core/jquery.min.js" type="text/javascript"></script>
 </head>
 
 <body class="index-page sidebar-collapse pre">
@@ -35,62 +38,14 @@
 		<button id="loadTest0" class="btn btn-primary btn-fab btn-round" style="left: 65%">
 		<div class="ripple-container"></div></button>			  
 	</div>
-
-	<!-- Navbar -->
-	<nav id="myNavBar" class="navbar navbar-color-on-scroll navbar-transparent fixed-top navbar-expand-lg unVisible" color-on-scroll="100" >
-		<div class="container">
-			<div class="navbar-translate">
-				<img src="./logo.png" alt="Circle Image" class="rounded-circle img-fluid" style="height: 50px">
-				<button class="navbar-toggler" type="button" data-toggle="collapse" aria-expanded="false" aria-label="Toggle navigation">
-					<span class="sr-only">Toggle navigation</span>
-					<span class="navbar-toggler-icon"></span>
-					<span class="navbar-toggler-icon"></span>
-					<span class="navbar-toggler-icon"></span>
-				</button>
-			</div>
-			<div class="collapse navbar-collapse">
-				<ul class="navbar-nav ml-auto">
-					<li class="nav-item">
-						<a href="#pablo" class="nav-link">
-							<i class="fa fa-phone"></i> +3 8 066 05 32 794
-							<div class="ripple-container"></div>
-						</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://wa.me/79234567890" class="nav-link">
-							<i class="fa fa-whatsapp"></i> Whatsapp
-						</a>
-					</li>
-					<li class="nav-item">
-						<a href="https://www.instagram.com/photo_room_nsk/?hl=ru" class="nav-link">
-							<i class="fa fa-instagram"></i> Instagram
-						</a>
-					</li>
-					<li class="nav-item">
-						<a href="#pablo" class="nav-link">
-							<i class="fa fa-vk"></i> VK
-							<div class="ripple-container"></div>
-						</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-  
-	<!-- Paralax Image -->
 	
-	<div class="page-header header-filter" data-parallax="true" style="background-image: url('assets/img/fon.jpg')">
-		<div class="container">
-			<div class="row">
-				<div class="col-md-8 ml-auto mr-auto">
-					<div class="brand text-center">
-						<h1>Photo Room</h1>
-						<h3 class="title text-center">Мы предоставляем лучшие услуги для наших клиентов.</h3>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	
+	<!-- HEADER -->
+	<div id="load-header"></div>
+	
+	<script>
+		$( "#load-header" ).load( "/test/header.html" );
+	</script>
   
   
 	<!-- Top container -->
@@ -207,35 +162,6 @@
 		</div>
 	</div>
   
-  
-	<!--<div class="space-70"></div>-->
-	
-	<!-- Card -->
-	<!--<div class="main main-raised" style="background-image: url('assets/fon_tree_test.jpg')">
-		<div class="container">
-			<div class="row">
-				<div class="col-sm-4" style="min-width: 300px;">
-					<div class="card text-black">
-						<img class="card-img-top" src="./assets/img/fon.jpg" alt="Card image cap">
-						<a href="#" class="btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Фотоуслуги <i class="material-icons">keyboard_arrow_right</i></dt></a>
-					</div>
-				</div>
-				<div class="col-sm-4"  style="min-width: 300px;">
-					<div class="card text-black">
-						<img class="card-img-top" src="./assets/img/fon.jpg" alt="Card image cap">
-						<a href="#" class="btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Фотосувениры <i class="material-icons">keyboard_arrow_right</i></dt></a>
-					</div>
-				</div>
-				<div class="col-sm-4"  style="min-width: 300px;">
-					<div class="card text-black">
-						<img class="card-img-top" src="./assets/img/fon.jpg" alt="Card image cap">
-						<a href="#" class="btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Печатные услуги <i class="material-icons">keyboard_arrow_right</i></dt></a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>-->
-  
 	<div class="space-70"></div>
 	
 	<!-- Info Company -->
@@ -317,114 +243,6 @@
 					</div>
 				</div>
 				
-				
-				<!-- Carousel Card -->
-				<!--<div id="carouselExampleControls" class="carousel0 slide col-sm-8 mr-auto ml-auto" data-ride="carousel0">
-					<div class="carousel-inner">
-						<div class="carousel-item active">
-							<div class="row text-center">
-								<div class="col-md-8 ml-auto mr-auto">
-									<h2>Краткое описание</h2>
-									<div class="blockquote undefined">
-										<p>
-											Полное описание.
-										</p>
-										<small>
-										  Имя
-										</small>
-									</div>
-								</div>
-							</div>	
-						</div>
-						
-						<div class="carousel-item">
-							<div class="row text-center">
-								<div class="col-md-8 ml-auto mr-auto">
-									<h2>Краткое описание</h2>
-									<div class="blockquote undefined">
-										<p>
-											Полное описание.
-										</p>
-										<small>
-										  Имя
-										</small>
-									</div>
-								</div>
-							</div>	
-						</div>
-						
-						<div class="carousel-item">
-							<div class="row text-center">
-								<div class="col-md-8 ml-auto mr-auto">
-									<h2>Краткое описание</h2>
-									<div class="blockquote undefined">
-										<p>
-											Полное описание.
-										</p>
-										<small>
-										  Имя
-										</small>
-									</div>
-								</div>
-							</div>	
-						</div>
-					</div>
-					
-				</div>-->
-				<!-- End Carousel Card -->
-				<!--
-				<div class="row text-center">
-					<div class="col-md-8 ml-auto mr-auto">
-						<p>
-							<button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
-								Добавить отзыв
-							</button>
-						</p>
-					</div>
-				</div>
-				
-				<div class="collapse" id="collapseExample">
-					<div class="container">
-						<div class="row">
-							<div class="col-lg-4 col-md-6 ml-auto mr-auto">
-								<div class="card card-login">
-									<form class="form" method="" action="">
-										<div class="card-body">
-											<span class="bmd-form-group">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text">
-															<i class="material-icons">face</i>
-														</span>
-													</div>
-													<input type="text" class="form-control" placeholder="Представтесь...">
-												</div>
-											</span>
-											<span class="bmd-form-group">
-												<div class="input-group">
-													<div class="input-group-prepend">
-														<span class="input-group-text">
-															<i class="material-icons">feedback</i>
-														</span>
-													</div>
-													<input type="text" class="form-control" placeholder="Краткое описание...">
-												</div>
-											</span>
-											<div class="form-group" style="text-center">
-												<label for="exampleFormControlTextarea1">Ваш отзыв:</label>
-												<textarea class="form-control" id="exampleFormControlTextarea1" rows="6"></textarea>
-											</div>
-										</div>
-										<div class="footer text-center">
-											<a href="#pablo" class="btn btn-primary btn-wd btn-lg">Отправить</a>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>-->
-				
 				<!-- Put this script tag to the <head> of your page -->
 				<script type="text/javascript" src="https://vk.com/js/api/openapi.js?159"></script>
 
@@ -443,29 +261,15 @@
 	</div>
   
 	<!-- Footer -->
-	<footer class="footer" data-background-color="black">
-		<div class="container">
-			<nav class="float-left">
-				<ul>
-					<li>
-						<a href="#pablo">
-							Photo Room
-						</a>
-					</li>
-				</ul>
-			</nav>
-			<div class="copyright float-right">
-				&copy;
-				<script>
-					document.write(new Date().getFullYear())
-				</script>, made with GreatDrek.
-			</div>
-		</div>
-	</footer>
+	<div id="load-footer"></div>
+	
+	<script>
+		$( "#load-footer" ).load( "/test/footer.html" );
+	</script>
   
   
   <!--   Core JS Files   -->
-  <script src="./assets/js/core/jquery.min.js" type="text/javascript"></script>
+  <!--<script src="./assets/js/core/jquery.min.js" type="text/javascript"></script>-->
   <script src="./assets/js/core/popper.min.js" type="text/javascript"></script>
   <script src="./assets/js/core/bootstrap-material-design.min.js" type="text/javascript"></script>
   <script src="./assets/js/plugins/moment.min.js"></script>
@@ -551,7 +355,7 @@
     });
   </script>
   
-   <script src="./assets/preload.js" type="text/javascript"></script>
+	<script src="./assets/preload.js" type="text/javascript"></script>
 </body>
 
 </html>
