@@ -27,65 +27,25 @@
 	<div id="load-header"></div>
 	
 	<script>
-		$( "#load-header" ).load( "/test/header.html" );
+		$( "#load-header" ).load( "/test/blocks/header.html" );
 	</script>
   
   
 	<!-- Top container -->
 	<div class="main main-raised" style="background-image: url('assets/fon_tree_test.jpg')">
 		<div class="container">
-			<div class="card card-nav-tabs card-plain">
-                <div class="card-header card-header-danger">
-					<div class="nav-tabs-navigation">
-						<div class="nav-tabs-wrapper ">
-							<ul class="nav nav-tabs" data-tabs="tabs">
-								<li class="nav-item">
-									<a class="nav-link" href="index.html">Главная</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link active" href="#services" data-toggle="tab">Услуги</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="#history" data-toggle="tab">Сувенирная продукция</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="index.html#Info">О нас</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="index.html#Contacts">Контакты</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="index.html#reviews">Отзывы</a>
-								</li>
-							</ul>
-						</div>
-					</div>
-                </div>
-            </div>
+			<!-- HEADER -->
+			<div id="load-nav-bar"></div>
+			
+			<script>
+				$( "#load-nav-bar" ).load( "/test/blocks/nav_bar.html" );
+			</script>
 			
 			<div class="row">
 				<div class="col-sm-4" style="min-width: 300px;">
 					<div class="text-black" style="background: transparent">
-						<img src="./assets/img/faces/avatar.jpg" alt="Circle Image" class="rounded-circle img-fluid">
-						<a href="#" class="card btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Фотоуслуги <i class="material-icons">keyboard_arrow_right</i></dt></a>
-					</div>
-				</div>
-				<div class="col-sm-4"  style="min-width: 300px;">
-					<div class="text-black">
-						<img src="./assets/img/faces/avatar.jpg" alt="Circle Image" class="rounded-circle img-fluid">
-						<a href="#" class="card btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Фотосувениры <i class="material-icons">keyboard_arrow_right</i></dt></a>
-					</div>
-				</div>
-				<div class="col-sm-4"  style="min-width: 300px;">
-					<div class="text-black">
-						<img src="./assets/img/faces/avatar.jpg" alt="Circle Image" class="rounded-circle img-fluid">
-						<a href="#" class="card btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Печатные услуги <i class="material-icons">keyboard_arrow_right</i></dt></a>
-					</div>
-				</div>
-				<div class="col-sm-4"  style="min-width: 300px;">
-					<div class="text-black">
-						<img src="./assets/img/faces/avatar.jpg" alt="Circle Image" class="rounded-circle img-fluid">
-						<a href="#" class="card btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Печатные услуги <i class="material-icons">keyboard_arrow_right</i></dt></a>
+						<img src="./assets/img/photo_room/print_services/printer.jpg" alt="Circle Image" class="img-fluid">
+						<a href="#" class="card btn btn-success btn-lg" style="width: 100%; margin-top: 20px"><dt>Печать <i class="material-icons">keyboard_arrow_right</i></dt></a>
 					</div>
 				</div>
 			</div>
@@ -99,7 +59,7 @@
 	<div id="load-footer"></div>
 	
 	<script>
-		$( "#load-footer" ).load( "/test/footer.html" );
+		$( "#load-footer" ).load( "/test/blocks/footer.html" );
 	</script>
   
   
