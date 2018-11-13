@@ -55,9 +55,6 @@ func main() {
 
 	http.HandleFunc("/u", serveHome)
 
-	fs := http.FileServer(http.Dir("./wordpress/"))
-	http.Handle("/wp/", http.StripPrefix("/wp/", fs))
-
 	fs1 := http.FileServer(http.Dir("./public/"))
 	http.Handle("/test/", http.StripPrefix("/test/", fs1))
 
