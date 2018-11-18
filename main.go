@@ -11,7 +11,9 @@ import (
 	"net/http"
 	"os"
 
-	//"path"
+	"encoding/json"
+	"io/ioutil"
+
 	"serviceAutorization"
 	"serviceConnection"
 
@@ -58,6 +60,8 @@ func main() {
 	fs1 := http.FileServer(http.Dir("./public/"))
 	http.Handle("/test/", http.StripPrefix("/test/", fs1))
 
+	http.HandleFunc("/test/caroosel", CarooselPost)
+
 	http.HandleFunc("/wss", func(w http.ResponseWriter, r *http.Request) {
 		serviceConnection.ServeWs(hub, w, r, &Client{})
 	})
@@ -83,4 +87,38 @@ func serveHome(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	http.ServeFile(w, r, "home.html")
+}
+
+func CarooselPost(w http.ResponseWriter, r *http.Request) {
+	//log.Println(r.URL)
+	if r.URL.Path != "/test/caroosel" {
+		http.Error(w, "Not found", http.StatusNotFound)
+		return
+	}
+	if r.Method != "POST" {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+	//http.ServeFile(w, r, "home.html")
+	//log.Println(r.FormValue("id"))
+
+	files, err := ioutil.ReadDir("./public/assets/img/photo_room/caroosel")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	imgCaroosel := make([]string, 0)
+
+	for _, file := range files {
+		if !file.IsDir() {
+			imgCaroosel = append(imgCaroosel, file.Name())
+		}
+	}
+
+	data, err := json.Marshal(imgCaroosel)
+	if err != nil {
+		log.Println(err)
+	}
+
+	w.Write(data)
 }

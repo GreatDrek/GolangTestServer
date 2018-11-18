@@ -42,13 +42,21 @@
   
 	<!-- Paralax Image -->
 	
-	<div class="page-header header-filter" data-parallax="true" style="background-image: url('assets/img/photo_room/paralax_img.jpg')">
+	<div class="page-header " data-parallax="true" style="background-image: url('assets/img/photo_room/paralax_img.jpg')">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-8 ml-auto mr-auto">
 					<div class="brand text-center">
-						<h1>Photo Room</h1>
-						<h3 class="title text-center">Мы предоставляем лучшие услуги для наших клиентов.</h3>
+					
+						<style type="text/css">
+							.show-on-mobile { visibility: hidden;}
+							/* Smartphone Portrait and Landscape */
+							@media only screen
+							and (min-device-width : 320px)
+							and (max-device-width : 480px){ .show-on-mobile { visibility: visible; }}
+						</style>
+					
+						<h1 class="show-on-mobile">Photo Room</h1>
 					</div>
 				</div>
 			</div>
